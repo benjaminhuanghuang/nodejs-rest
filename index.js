@@ -1,23 +1,25 @@
 const http = require('http');
 const express = require('express');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const {Strategy : JwtStrategy, ExtractJwt} = require('passport-jwt');
+const jwtOptions={
+    jwtFromRequest : ExtractJwt.fromAuthHeader(),
+    secretOrKey:'secret',
+    algorithms:['HS256']
+};
+passport.use(new JwtStrategy(jwtOptions, function(jwtPayload, done){
+    done(null, {name: jwtPayload.name});
+}));
+const widgetRouter = require('./routers/widgets');
 
 const app = express();
 const server = http.createServer(app);
 
-app.get('api/widgets', function(req, res){
-    res.json([
-        {
-            name:'Widget 1', color:'blue', size:"large", quantity:3
-        },
-        {
-            name:'Widget 2', color:'red', size:"small", quantity:5
-        },
-        {
-            name:'Widget 3', color:'orange', size:"medium", quantity:10
-        },
-    ]);
-});
+app.use(passport.authentication('jwt',{session:false}))
+app.use('/api', bodyParser.json());
+app.use('/api', widgetRouter);
 
-server.listen(3000, function(){
+server.listen(3000, function () {
     console.log('REST service running on port 3000');
 });
