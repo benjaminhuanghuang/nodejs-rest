@@ -16,6 +16,7 @@ const app = express();
 const server = http.createServer(app);
 
 // middle wares
+app.use(express.static("client"));
 app.use(passport.authentication('jwt',{session:false}))
 app.use('/api', bodyParser.json());
 

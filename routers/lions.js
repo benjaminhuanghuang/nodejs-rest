@@ -73,6 +73,7 @@ lionsRouter.delete("/lions/:id", function () {
         res.send();
     } else {
         var deletedLion = _.assign(lions[lionIndex], update);
+        lions.splice(lionIndex, 1);
         res.json(deletedLion);
     }
 });
