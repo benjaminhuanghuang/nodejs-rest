@@ -11,14 +11,21 @@ const jwtOptions={
 passport.use(new JwtStrategy(jwtOptions, function(jwtPayload, done){
     done(null, {name: jwtPayload.name});
 }));
-const widgetRouter = require('./routers/widgets');
 
 const app = express();
 const server = http.createServer(app);
 
+// middle wares
 app.use(passport.authentication('jwt',{session:false}))
 app.use('/api', bodyParser.json());
+
+// api router
+const widgetRouter = require('./routers/widgets');
 app.use('/api', widgetRouter);
+
+// lions api router
+const lionsRouter = require('./routers/lions');
+app.use('/api', lionsRouter);
 
 server.listen(3000, function () {
     console.log('REST service running on port 3000');
