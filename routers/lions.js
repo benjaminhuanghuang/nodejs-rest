@@ -4,7 +4,7 @@ var _ = require('lodash');
 
 // data storage 
 var lions = [];
-
+var id = 0;
 /*  
     GET  /lions
     Return all items
