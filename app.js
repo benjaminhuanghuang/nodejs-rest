@@ -1,4 +1,3 @@
-const http = require('http');
 const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
@@ -17,6 +16,12 @@ const server = http.createServer(app);
 
 // middle wares
 app.use(express.static("client"));
+// use middleware simulate latency
+// app.use(function(req,res,next)
+// {
+//   setTimeout(next,3000)
+// });
+
 app.use(passport.authentication('jwt',{session:false}))
 app.use('/api', bodyParser.json());
 
